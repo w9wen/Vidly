@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -9,9 +11,24 @@ namespace Vidly.Controllers
         public IActionResult Random()
         {
             var movie = new Movie() { Name = "Shrek!" };
-            ViewData["Movie"] = movie;
+            // ViewData["RandomMovie"] = movie;
+            // ViewBag.Movie = movie;
 
-            return View();
+            // var viewResult = new ViewResult();
+            // viewResult.ViewData.Model = 
+
+            var customers = new List<Customer>
+            {
+                new Customer {Name = "Customer 1"},
+                new Customer {Name = "Customer 2"}
+            };
+            var viewModel = new RandomMovieViewModel()
+            {
+                Movie = movie,
+                Customers = customers
+            };
+            
+            return View(viewModel);
             // return Content("Hello World!");
             // return NotFound();
             // return new EmptyResult();
@@ -41,6 +58,6 @@ namespace Vidly.Controllers
         {
             return Content("Date = " + year + "/" + month);
         }
-        
+
     }
 }
