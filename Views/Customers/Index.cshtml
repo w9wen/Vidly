@@ -1,0 +1,20 @@
+@model IEnumerable<Vidly.Models.Customer>
+@{
+    ViewBag.Title="Customers";
+    Layout="~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h1 class="display-4">Customers</h1>
+    @if (!Model.Any())
+    {
+        <p>We don't have any customers here.</p>
+    }
+
+    @* <ul>
+        @foreach (var customer in Model)
+        {
+            <li>@customer.Name</li>
+        }
+    </ul> *@
+</div>
