@@ -9,12 +9,26 @@
     @if (!Model.Any())
     {
         <p>We don't have any customers here.</p>
+    }else
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Customers</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(customer.Name, "Detail", "Customers", new { id = customer.Id}, null)</td>
+                    </tr>                 
+                }
+            </tbody>
+        </table>
+
+        
+
     }
 
-    <ul>
-        @foreach (var customer in Model)
-        {
-            <li>@customer.Name</li>
-        }
-    </ul>
 </div>
