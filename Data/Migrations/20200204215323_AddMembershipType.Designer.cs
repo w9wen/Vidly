@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vidly.Data;
 
 namespace Vidly.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204215323_AddMembershipType")]
+    partial class AddMembershipType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,9 +221,6 @@ namespace Vidly.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsSubscribedToNewsletter")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte>("MembershipTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
