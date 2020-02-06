@@ -229,6 +229,8 @@ namespace Vidly.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MembershipTypeId");
+
                     b.ToTable("Customers");
                 });
 
@@ -298,6 +300,15 @@ namespace Vidly.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Vidly.Models.Customer", b =>
+                {
+                    b.HasOne("Vidly.Models.MembershipType", "MembershipType")
+                        .WithMany()
+                        .HasForeignKey("MembershipTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

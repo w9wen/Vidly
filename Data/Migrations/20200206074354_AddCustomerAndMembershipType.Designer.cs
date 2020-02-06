@@ -9,8 +9,8 @@ using Vidly.Data;
 namespace Vidly.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200204215639_AddMembershipTypeIdToCustomer")]
-    partial class AddMembershipTypeIdToCustomer
+    [Migration("20200206074354_AddCustomerAndMembershipType")]
+    partial class AddCustomerAndMembershipType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -231,6 +231,8 @@ namespace Vidly.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MembershipTypeId");
+
                     b.ToTable("Customers");
                 });
 
@@ -300,6 +302,15 @@ namespace Vidly.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Vidly.Models.Customer", b =>
+                {
+                    b.HasOne("Vidly.Models.MembershipType", "MembershipType")
+                        .WithMany()
+                        .HasForeignKey("MembershipTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
