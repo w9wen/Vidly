@@ -225,7 +225,9 @@ namespace Vidly.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 

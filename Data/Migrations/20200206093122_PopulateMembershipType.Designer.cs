@@ -9,8 +9,8 @@ using Vidly.Data;
 namespace Vidly.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200206081031_PopulateMembershipTypes")]
-    partial class PopulateMembershipTypes
+    [Migration("20200206093122_PopulateMembershipType")]
+    partial class PopulateMembershipType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,7 +227,9 @@ namespace Vidly.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 

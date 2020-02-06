@@ -26,7 +26,7 @@ namespace Vidly.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
                     IsSubscribedToNewsletter = table.Column<bool>(nullable: false),
                     MembershipTypeId = table.Column<byte>(nullable: false)
                 },

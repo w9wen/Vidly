@@ -9,7 +9,7 @@ using Vidly.Data;
 namespace Vidly.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200206074354_AddCustomerAndMembershipType")]
+    [Migration("20200206092551_AddCustomerAndMembershipType")]
     partial class AddCustomerAndMembershipType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,7 +227,9 @@ namespace Vidly.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
