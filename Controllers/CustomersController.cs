@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
@@ -21,17 +22,17 @@ namespace Vidly.Controllers
             this.dbContext.Dispose();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // var customers = GetCustomers();
-            var customers = this.dbContext.Customers.Include(c => c.MembershipType).ToList();
+            var customers = await this.dbContext.Customers.Include(c => c.MembershipType).ToListAsync();
             return View(customers);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
             // var customer = this.dbContext.Customers.SingleOrDefault(c => c.Id == id);
-            var customer = this.dbContext.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
+            var customer = await this.dbContext.Customers.Include(c => c.MembershipType).SingleOrDefaultAsync(c => c.Id == id);
 
             if (customer == null)
             {
