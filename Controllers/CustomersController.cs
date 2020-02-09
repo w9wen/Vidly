@@ -55,6 +55,17 @@ namespace Vidly.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel()
+                {
+                    Customer = customer,
+                    MembershipTypes = await this.dbContext.MembershipTypes.ToListAsync(),
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
             if (customer.Id == 0)
             {
                 await this.dbContext.Customers.AddAsync(customer);
@@ -65,7 +76,7 @@ namespace Vidly.Controllers
                 customerInDb.Name = customer.Name;
                 customerInDb.Birthdate = customer.Birthdate;
                 customerInDb.MembershipTypeId = customer.MembershipTypeId;
-                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter; 
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
             }
             await dbContext.SaveChangesAsync();
             return RedirectToAction("Index", "Customers");
