@@ -53,11 +53,22 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Save(Customer customer)
         {
-            await dbContext.Customers.AddAsync(customer);
+            if (customer.Id == 0)
+            {
+                await this.dbContext.Customers.AddAsync(customer);
+            }
+            else
+            {
+                var customerInDb = await this.dbContext.Customers.SingleAsync(c => c.Id == customer.Id);
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthdate = customer.Birthdate;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter; 
+            }
             await dbContext.SaveChangesAsync();
-            return View("Test");
+            return RedirectToAction("Index", "Customers");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -66,11 +77,11 @@ namespace Vidly.Controllers
             if (customer == null)
                 return NotFound();
 
-                var newCustomer = new CustomerFormViewModel()
-                {
-                    Customer = customer,
-                    MembershipTypes = await dbContext.MembershipTypes.ToListAsync()
-                };
+            var newCustomer = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = await dbContext.MembershipTypes.ToListAsync()
+            };
             return View("CustomerForm", newCustomer);
         }
 
