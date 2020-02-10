@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -42,13 +41,68 @@ namespace Vidly.Controllers
             return View(customer);
         }
 
-        private IEnumerable<Customer> GetCustomers()
+
+        public async Task<IActionResult> New()
         {
-            return new List<Customer>()
+            var membershipTypes = await dbContext.MembershipTypes.ToListAsync();
+            var newCustomer = new CustomerFormViewModel()
             {
-                new Customer(){ Id = 1, Name = "John Smith"},
-                new Customer(){ Id = 2, Name = "Mary William"},
+                MembershipTypes = membershipTypes
             };
+            return View("CustomerForm", newCustomer);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel()
+                {
+                    Customer = customer,
+                    MembershipTypes = await this.dbContext.MembershipTypes.ToListAsync(),
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
+            if (customer.Id == 0)
+            {
+                await this.dbContext.Customers.AddAsync(customer);
+            }
+            else
+            {
+                var customerInDb = await this.dbContext.Customers.SingleAsync(c => c.Id == customer.Id);
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthdate = customer.Birthdate;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+            }
+            await dbContext.SaveChangesAsync();
+            return RedirectToAction("Index", "Customers");
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var customer = await dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id);
+            if (customer == null)
+                return NotFound();
+
+            var newCustomer = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = await dbContext.MembershipTypes.ToListAsync()
+            };
+            return View("CustomerForm", newCustomer);
+        }
+
+        // private IEnumerable<Customer> GetCustomers()
+        // {
+        //     return new List<Customer>()
+        //     {
+        //         new Customer(){ Id = 1, Name = "John Smith"},
+        //         new Customer(){ Id = 2, Name = "Mary William"},
+        //     };
+        // }
     }
 }

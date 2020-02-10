@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -80,11 +81,57 @@ namespace Vidly.Controllers
 
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> New()
         {
-            return Content("id=" + id);
-        }
+            var genres = await this.dbContext.Genre.ToListAsync();
+            var newMovie = new MovieFormViewModel()
+            {
+                Genres = genres
+            };
+            return View("MovieForm", newMovie);
 
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var movie = await this.dbContext.Movies.SingleOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+                return NotFound();
+
+            var viewModel = new MovieFormViewModel()
+            {
+                Movie = movie,
+                Genres = await dbContext.Genre.ToListAsync(),
+            };
+
+            return View("MovieForm", viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Save(Movie movie)
+        {
+            if (movie.Id == 0)
+            {
+                movie.DateAdded = DateTime.Now;
+                await this.dbContext.Movies.AddAsync(movie);
+            }
+            else
+            {
+                var movieInDb = await this.dbContext.Movies.SingleAsync(m => m.Id == movie.Id);
+                movieInDb.Name = movie.Name;
+                movieInDb.GenreId = movie.GenreId;
+                movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+            }
+            try
+            {
+
+                await this.dbContext.SaveChangesAsync();
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine(ex);
+            }
+            return RedirectToAction("Index", "Movies");
+        }
         // public IActionResult Index(int? pageIndex, string sortBy)
         // {
         //     if (!pageIndex.HasValue)
