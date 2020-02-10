@@ -94,12 +94,12 @@ namespace Vidly.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var movie = await this.dbContext.Movies.SingleOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
                 return NotFound();
 
-            var viewModel = new MovieFormViewModel()
+            var viewModel = new MovieFormViewModel(movie)
             {
-                Movie = movie,
                 Genres = await dbContext.Genre.ToListAsync(),
             };
 

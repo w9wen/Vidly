@@ -54,6 +54,7 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(Customer customer)
         {
             if (!ModelState.IsValid)
