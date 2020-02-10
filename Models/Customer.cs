@@ -7,7 +7,7 @@ namespace Vidly.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "請輸入客戶姓名")]
         [StringLength(255)]
         public string Name { get; set; }
 
@@ -18,6 +18,7 @@ namespace Vidly.Models
 
         public MembershipType MembershipType { get; set; }
         [Display(Name = "Date of Birth")]
+        [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
 
     }
