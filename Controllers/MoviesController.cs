@@ -103,6 +103,7 @@ namespace Vidly.Controllers
             return View("MovieForm", viewModel);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken ]
         public async Task<IActionResult> Save(Movie movie)
         {
             if (!ModelState.IsValid)
