@@ -48,9 +48,6 @@ namespace Vidly.Controllers
             };
         }
 
-
-
-
         // Get: Movies/Random
         public IActionResult Random()
         {
@@ -108,6 +105,15 @@ namespace Vidly.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel()
+                {
+                    Genres = await this.dbContext.Genre.ToListAsync()
+                };
+                return View("MovieForm", viewModel);
+            }
+
             if (movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;
