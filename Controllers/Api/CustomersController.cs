@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
+using Vidly.Dtos;
 using Vidly.Models;
 
 namespace Vidly.Controllers.Api
@@ -16,22 +18,26 @@ namespace Vidly.Controllers.Api
     public class CustomersController : ControllerBase
     {
         private ApplicationDbContext dbContext;
+        private IMapper mapper;
 
-        public CustomersController(ApplicationDbContext dbContext)
+        public CustomersController(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         // POST /api/customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
-            return await this.dbContext.Customers.ToListAsync();
+            var customerList = await this.dbContext.Customers.ToListAsync();
+            var customerDtoList = mapper.Map<List<CustomerDto>>(customerList);
+            return customerDtoList;
         }
 
         // GET /api/customers/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<CustomerDto>> GetCustomer(int id)
         {
             // var customer = await this.dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id);
             var customer = await this.dbContext.Customers.FindAsync(id);
@@ -39,7 +45,9 @@ namespace Vidly.Controllers.Api
             if (customer == null)
                 return NotFound();
 
-            return customer;
+            var customerDto = mapper.Map<CustomerDto>(customer);
+
+            return customerDto;
         }
 
 
@@ -47,21 +55,25 @@ namespace Vidly.Controllers.Api
         [HttpPost]
         // [ProducesResponseType(StatusCodes.Status201Created)]
         // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
+            
+            var customer = mapper.Map<Customer>(customerDto);
 
             this.dbContext.Customers.Add(customer);
             await this.dbContext.SaveChangesAsync();
 
+            customerDto.Id = customer.Id;
+
             // return customer;
-            return CreatedAtAction(nameof(GetCustomer), new {id = customer.Id}, customer);
+            return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
         }
 
         // PUT /api/customers/1
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCustomer(int id, Customer customer)
+        public async Task<ActionResult> UpdateCustomer(int id, CustomerDto customerDto)
         {
             // if (!ModelState.IsValid)
             //     return BadRequest();
@@ -77,8 +89,10 @@ namespace Vidly.Controllers.Api
 
             // await this.dbContext.SaveChangesAsync();
             // return Ok();
-            if (id != customer.Id)
+            if (id != customerDto.Id)
                 return BadRequest();
+
+            var customer = mapper.Map<Customer>(customerDto);
 
             this.dbContext.Entry(customer).State = EntityState.Modified;
 
@@ -102,7 +116,7 @@ namespace Vidly.Controllers.Api
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
             // // var customerInDb = await this.dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id);
-            
+
             // if (customerInDb == null)
             //     return NotFound();
 
@@ -111,13 +125,13 @@ namespace Vidly.Controllers.Api
             // return Ok();
 
             var customer = await this.dbContext.Customers.FindAsync(id);
-            if(customer == null)
-             return NotFound();
+            if (customer == null)
+                return NotFound();
 
-             this.dbContext.Customers.Remove(customer);
-             await this.dbContext.SaveChangesAsync();
+            this.dbContext.Customers.Remove(customer);
+            await this.dbContext.SaveChangesAsync();
 
-             return customer;
+            return customer;
 
         }
 
