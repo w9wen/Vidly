@@ -72,7 +72,8 @@ namespace Vidly.Controllers.Api
         }
 
         // PUT /api/customers/1
-        [HttpPut("{id}")]
+        // [HttpPut("{id}")]
+        [HttpPut]
         public async Task<ActionResult> UpdateCustomer(int id, CustomerDto customerDto)
         {
             // if (!ModelState.IsValid)
@@ -112,7 +113,8 @@ namespace Vidly.Controllers.Api
         }
 
         // DELETE /api/customers/1
-        [HttpDelete("{id}")]
+        // [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
             // // var customerInDb = await this.dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id);
