@@ -73,7 +73,7 @@ namespace Vidly.Controllers.Api
 
         // PUT /api/customers/1
         // [HttpPut("{id}")]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCustomer(int id, CustomerDto customerDto)
         {
             // if (!ModelState.IsValid)

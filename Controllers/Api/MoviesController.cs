@@ -30,7 +30,8 @@ namespace Vidly.Controllers.Api
             return movieListDto;
         }
 
-        [HttpGet]
+        // GET: api/movies/2
+        [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> GetMovie(int id)
         {
             var movie = await this.dbContext.Movies.FindAsync(id);
@@ -56,6 +57,8 @@ namespace Vidly.Controllers.Api
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
         }
 
+        // PUT: api/movies/5
+        [HttpPut("{id}")]
         public async Task<ActionResult> UpdateMovie(int id, MovieDto movieDto)
         {
             if (id != movieDto.Id)
@@ -77,6 +80,19 @@ namespace Vidly.Controllers.Api
                 else throw;
             }
             return NoContent();
+        }
+
+        // DELETE: api/movies/3
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Movie>> DeleteMovie(int id)
+        {
+            var movie = await this.dbContext.Movies.FindAsync(id);
+            if (movie == null)
+                return NotFound();
+            this.dbContext.Movies.Remove(movie);
+            await this.dbContext.SaveChangesAsync();
+
+            return movie;
         }
 
         private bool MovieExists(int id) => this.dbContext.Movies.Any(m => m.Id == id);

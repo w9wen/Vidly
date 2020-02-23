@@ -13,10 +13,14 @@ namespace Vidly
             CreateMap<Movie, MovieDto>();
 
             //// Dto to Domain
-            CreateMap<CustomerDto, Customer>()
-                .ForMember(c => c.Id, opt => opt.Ignore());
-            CreateMap<Customer, Customer>()
-                .ForMember(c => c.Id, opt => opt.Ignore());
+            CreateMap<CustomerDto, Customer>();
+            CreateMap<MovieDto, Movie>();
+
+
+            // CreateMap<CustomerDto, Customer>()
+            //     .ForMember(c => c.Id, opt => opt.Ignore());
+            // CreateMap<MovieDto, Movie>()
+            //     .ForMember(c => c.Id, opt => opt.Ignore());
 
         }
     }
