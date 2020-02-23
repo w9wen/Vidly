@@ -114,7 +114,7 @@ namespace Vidly.Controllers.Api
 
         // DELETE /api/customers/1
         // [HttpDelete("{id}")]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
             // // var customerInDb = await this.dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id);
