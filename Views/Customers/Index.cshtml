@@ -28,19 +28,92 @@
                         <td>
                             <button data-customer-id="@customer.Id" class="btn-link js-delete">Delete</button>
                         </td>
-                    </tr>                 
+                    </tr>
                 }
             </tbody>
         </table>
+
+        <div id="container">
+            <button class="e-control e-btn" id="targetButton" role="button" e-ripple="true" style="position: absolute;">Open Dialog</button>
+            <div id="dialog"></div>
+        </div>
+
     }
 </div>
 @section scripts
 {
     <script>
+
+        @* var ele = document.getElementById('container');
+        if(ele){
+            ele.style.visibility = 'visible';
+        }
+
+        ej.base.enableRipple(true);
+
+        // Initialize Dialog component
+        var dialog = new ej.popups.Dialog({
+            // Enables modal dialog
+            isModal:true,
+            // overlayClick event handler
+            overlayClick: onOverlayClick,
+            // Dialog content
+            content: 'This is a modal dialog',
+            // The Dialog shows within the target element
+            target: document.getElementById("container"),
+            // Dialog width
+            width: '250px'
+        });
+        // Render initialized Dialog
+        dialog.appendTo('#dialog');
+
+        // Sample level code to handle the button click action
+        document.getElementById('targetButton').onclick = function() {
+            // Call the show method to open the Dialog
+            dialog.show();
+        }
+
+        // Sample level code to hide the Dialog when click the Dialog overlay
+        function onOverlayClick() {
+            dialog.hide();
+        } *@
+
+
+
+        var dialog = new ej.popups.Dialog({
+            // Enables modal dialog
+            isModal:true,
+            // overlayClick event handler
+            overlayClick: onOverlayClick,
+            // Dialog content
+            content: 'This is a modal dialog',
+            // The Dialog shows within the target element
+            target: document.getElementById("container"),
+            // Dialog width
+            width: '250px'
+        });
+        // Render initialized Dialog
+        dialog.appendTo('#dialog');
+
+
+
+        // Sample level code to hide the Dialog when click the Dialog overlay
+        function onOverlayClick() {
+            dialog.hide();
+        }
+
+
+
+
+
+
+
+
+
         $(document).ready(function(){
             $("#customers .js-delete").on("click", function(){
                 var button = $(this);
-                bootbox.alert("Hello World");
+                dialog.show();
                 @* bootbox.confirm("bootbox said: Are you sure want to delete this customer?"); *@
                 @* if(confirm("Are you sure you want to delete this customer?")){
                     $.ajax({
