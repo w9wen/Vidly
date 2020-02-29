@@ -30,7 +30,11 @@ namespace Vidly.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
-            var customerList = await this.dbContext.Customers.ToListAsync();
+            // var customerList = await this.dbContext.Customers.ToListAsync();
+            var customerList =
+                await this.dbContext.Customers
+                    .Include(c => c.MembershipType)
+                    .ToListAsync();
             var customerDtoList = mapper.Map<List<CustomerDto>>(customerList);
             return customerDtoList;
         }
@@ -59,7 +63,7 @@ namespace Vidly.Controllers.Api
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            
+
             var customer = mapper.Map<Customer>(customerDto);
 
             this.dbContext.Customers.Add(customer);
