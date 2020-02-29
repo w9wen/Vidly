@@ -25,7 +25,11 @@ namespace Vidly.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
-            var movieList = await this.dbContext.Movies.ToListAsync();
+            // var movieList = await this.dbContext.Movies.ToListAsync();
+            var movieList = 
+                await this.dbContext.Movies
+                .Include(m => m.Genre)
+                .ToListAsync();
             var movieListDto = this.mapper.Map<List<MovieDto>>(movieList);
             return movieListDto;
         }

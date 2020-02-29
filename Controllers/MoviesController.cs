@@ -24,11 +24,11 @@ namespace Vidly.Controllers
             this.dbContext.Dispose();
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             // var movies = GetMovies();
-            var movies = await this.dbContext.Movies.Include(m => m.Genre).ToListAsync();
-            return View(movies);
+            // var movies = await this.dbContext.Movies.Include(m => m.Genre).ToListAsync();            
+            return View();
         }
 
         public async Task<IActionResult> Detail(int id)
