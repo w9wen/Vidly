@@ -45,7 +45,7 @@ namespace Vidly
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSignalR()
-                .AddAzureSignalR();
+                .AddAzureSignalR(@"Endpoint=https://pntech.service.signalr.net;AccessKey=XB5ZRz4hcTeUSa0UzmgJ212gfPJOrJ1Dfc1Fl60cmPw=;Version=1.0;");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
